@@ -20,14 +20,14 @@
 //}
 
 function countdownTimer(startTime, interval) {
-  let remaining = startTime;
+  let timeLeft = startTime;
 
   const timerId = setInterval(() => {
-    if (remaining <= 0) {
-      clearInterval(timerId); 
+    if (timeLeft > 0) {
+      console.log(timeLeft);
+      timeLeft--;
     } else {
-      console.log(remaining);
-      remaining--;
+      clearInterval(timerId); 
     }
   }, interval);
 

@@ -1,26 +1,27 @@
 const { countdownTimer } = require('../src/countdown');
-
 jest.useFakeTimers();
 
 describe('countdownTimer', () => {
   test('should log remaining time at intervals and stop at 0', () => {
-    console.log = jest.fn(); // Mock console.log
-    const clearSpy = jest.spyOn(global, 'clearInterval'); // ✅ Spy on clearInterval
+    console.log = jest.fn();
 
-    const startTime = 5; // 5 seconds
-    const interval = 1000; // 1 second
+    // ✅ Spy before function runs
+    const clearSpy = jest.spyOn(global, 'clearInterval');
+
+    const startTime = 5;
+    const interval = 1000;
     const timerId = countdownTimer(startTime, interval);
 
-    // Fast-forward all timers
-    jest.advanceTimersByTime(startTime * interval);
+    // ✅ Advance one extra interval to ensure final tick runs
+    jest.advanceTimersByTime((startTime + 1) * interval);
 
-    // Verify that console.log was called correctly
+    // ✅ Check if console.log was called the right number of times
     expect(console.log).toHaveBeenCalledTimes(startTime);
     for (let i = startTime; i > 0; i--) {
       expect(console.log).toHaveBeenCalledWith(i);
     }
 
-    // Ensure timer was stopped
-    expect(clearSpy).toHaveBeenCalledWith(timerId); // ✅ Now tracked correctly
+    // ✅ Verify that clearInterval was called with correct ID
+    expect(clearSpy).toHaveBeenCalledWith(timerId);
   });
 });
